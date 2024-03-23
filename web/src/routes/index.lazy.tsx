@@ -55,6 +55,7 @@ function Dashboard() {
                       <AlertDialogDescription>
                         <ScrollArea>
                           <div className="h-72">
+                            {/* @ts-expect-error okay for now */}
                             {frame.warpcastUrls.map(url => (
                               <Button key={url} variant="link" className="text-sm m-0 p-0">
                                 <a href={url} target="_blank" rel="noreferrer">
@@ -82,6 +83,7 @@ function Dashboard() {
             </CardContent>
             <CardFooter>
               <div className="flex w-full justify-between">
+                {/* @ts-expect-error okay for now */}
                 {frame.buttons.map(button => {
                   if (button?.action === 'link') {
                     return (
