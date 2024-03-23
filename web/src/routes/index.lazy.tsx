@@ -7,7 +7,6 @@ import { trpc } from '@/lib/trpc';
 import { useToast } from '@/components/ui/use-toast';
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -17,10 +16,9 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Separator } from '@radix-ui/react-dropdown-menu';
 
 function Dashboard() {
-  const { data } = trpc.frames.topGlobal.useQuery({
+  const { data, isLoading } = trpc.frames.topGlobal.useQuery({
     limit: 10,
     offset: 0,
   });
@@ -30,6 +28,7 @@ function Dashboard() {
   return (
     <main className="flex flex-1 flex-col p-4 max-w-2xl mx-auto">
       <div className="flex flex-col mx-auto space-y-4">
+        {isLoading && <div>Loading...</div>}
         {data?.map(frame => (
           <Card>
             <CardHeader />
