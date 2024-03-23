@@ -1,0 +1,14 @@
+{
+  "name": "frameworks-2024",
+  "version": "1.0.0",
+  "description": "Hacking for Frameworks 2024",
+  "private": true,
+  "author": "Saihajpreet Singh <saihajpreet.singh@gmail.com> (https://saihaj.dev)",
+  "license": "MIT",
+  "scripts": {
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "prettier": "^3.2.5"
+  }
+}
