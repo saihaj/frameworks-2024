@@ -8,6 +8,7 @@ import { PrivyProvider } from '@privy-io/react-auth';
 import { routeTree } from './routeTree.gen';
 import { ThemeProvider } from './components/theme-provider';
 import { TRPCProvider } from './components/client';
+import { Toaster } from './components/ui/toaster';
 
 // Create a new router instance
 const router = createRouter({ routeTree });
@@ -38,6 +39,7 @@ if (!rootElement.innerHTML) {
         >
           <TRPCProvider>
             <RouterProvider router={router} />
+            <Toaster />
           </TRPCProvider>
         </PrivyProvider>
       </ThemeProvider>

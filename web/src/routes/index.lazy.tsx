@@ -4,13 +4,29 @@ import { ArrowUpRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { trpc } from '@/lib/trpc';
+import { useToast } from '@/components/ui/use-toast';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Separator } from '@radix-ui/react-dropdown-menu';
 
 function Dashboard() {
   const { data } = trpc.frames.topGlobal.useQuery({
     limit: 10,
     offset: 0,
   });
-  console.log(data);
+
+  const { toast } = useToast();
+
   return (
     <main className="flex flex-1 flex-col p-4 max-w-2xl mx-auto">
       <div className="flex flex-col mx-auto space-y-4">
@@ -26,7 +42,37 @@ function Dashboard() {
                 src={frame.image}
                 alt={frame.image}
               />
-              <div className="flex justify-end">
+              <div className="flex justify-between">
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="link" className="text-xs text-muted-foreground m-0 p-0">
+                      View on Warpcast
+                      <ArrowUpRight size={16} />
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Checkout different casts</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        <ScrollArea>
+                          <div className="h-72">
+                            {frame.warpcastUrls.map(url => (
+                              <Button key={url} variant="link" className="text-sm m-0 p-0">
+                                <a href={url} target="_blank" rel="noreferrer">
+                                  {url}
+                                </a>
+                              </Button>
+                            ))}
+                          </div>
+                        </ScrollArea>
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Close</AlertDialogCancel>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+
                 <Button variant="link" className="text-xs text-muted-foreground m-0 p-0">
                   <a href={frame.url} target="_blank" rel="">
                     {frame.url.match(/https?:\/\/([^/]+)/)?.[1]}
@@ -36,12 +82,34 @@ function Dashboard() {
               </div>
             </CardContent>
             <CardFooter>
-              <div className="flex">
-                {frame.buttons.map(button => (
-                  <Button variant="default" className="cursor-pointer">
-                    {button?.text}
-                  </Button>
-                ))}
+              <div className="flex w-full justify-between">
+                {frame.buttons.map(button => {
+                  if (button?.action === 'link') {
+                    return (
+                      <Button variant="default" className="cursor-pointer">
+                        <a href={button.target} target="_blank" rel="noreferrer">
+                          {button?.text}
+                        </a>
+                      </Button>
+                    );
+                  }
+
+                  return (
+                    <Button
+                      variant="default"
+                      className="cursor-pointer"
+                      onClick={async () => {
+                        toast({
+                          variant: 'destructive',
+                          title: 'Coming Soon!',
+                          description: 'Support for this action is not implemented yet.',
+                        });
+                      }}
+                    >
+                      {button?.text}
+                    </Button>
+                  );
+                })}
               </div>
             </CardFooter>
           </Card>
