@@ -23,7 +23,7 @@ function Navigation() {
   const disableLogin = !ready || (ready && authenticated);
 
   return (
-    <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
+    <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6 z-50">
       <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
         <Link href="#" className="flex items-center gap-2 text-lg font-semibold md:text-base">
           <Telescope className="h-6 w-6" />
@@ -43,11 +43,18 @@ function Navigation() {
               <Telescope className="h-6 w-6" />
               <span className="sr-only">FrameScout</span>
             </Link>
+            <Button variant="ghost" size="lg" className="bg-blue-600 h-10" asChild>
+              <Link to="/create">Open Creator Studio</Link>
+            </Button>
           </nav>
         </SheetContent>
       </Sheet>
       <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
         <div className="ml-auto flex-1 sm:flex-initial" />
+
+        <Button variant="ghost" size="lg" className="bg-blue-600 hidden md:flex">
+          <Link to="/create">Open Creator Studio</Link>
+        </Button>
 
         {!disableLogin ? (
           <Button onClick={login} variant="default" size="sm">

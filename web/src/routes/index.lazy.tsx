@@ -1,4 +1,4 @@
-import { createLazyFileRoute } from '@tanstack/react-router';
+import { Link, createLazyFileRoute } from '@tanstack/react-router';
 import { ArrowUpRight } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -26,8 +26,8 @@ function Dashboard() {
   const { toast } = useToast();
 
   return (
-    <main className="flex flex-1 flex-col p-4 max-w-2xl mx-auto">
-      <div className="flex flex-col mx-auto space-y-4">
+    <main className="flex flex-1 flex-col p-4 relative">
+      <div className="flex flex-col mx-auto space-y-4 max-w-2xl">
         {isLoading && <div>Loading...</div>}
         {data?.map(frame => (
           <Card>
@@ -115,6 +115,11 @@ function Dashboard() {
             </CardFooter>
           </Card>
         ))}
+      </div>
+      <div className="sticky left-0 bottom-10 flex md:hidden justify-end">
+        <Button variant="ghost" size="lg" className="bg-blue-600 h-10" asChild>
+          <Link to="/create">Open Creator Studio</Link>
+        </Button>
       </div>
     </main>
   );
