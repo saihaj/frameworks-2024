@@ -57,7 +57,7 @@ function Navigation() {
         </Button>
 
         {!disableLogin ? (
-          <Button onClick={login} variant="default" size="sm">
+          <Button onClick={login} variant="default" size="lg">
             Login
           </Button>
         ) : (
