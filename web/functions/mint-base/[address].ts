@@ -96,9 +96,10 @@ export const onRequest: PagesFunction = async ({ request, params }) => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>FrameScout mintable ${address}</title>
         <meta name="fc:frame" content="vNext" />
-        <meta name="fc:image" content="${imageUrl}" />
+        <meta name="fc:frame:image" content="${imageUrl}" />
         <meta name="fc:frame:button:1" content="Mint" />
         <meta name="fc:frame:button:1:action" content="tx" />
+        <meta name="fc:frame:button:1:target" content="https://frameworks-2024.pages.dev/mint-base/${address}" />
       </head>
       <body>
         Check on Farcster to mint this
