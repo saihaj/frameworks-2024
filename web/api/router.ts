@@ -38,6 +38,24 @@ const t = initTRPC.create();
 const publicProcedure = t.procedure;
 const router = t.router;
 
+const queryBaseNFT = /* GraphQL */ `
+  query QueryBaseNFT($address: Address!) {
+    TokenNfts(input: { limit: 1, filter: { address: { _eq: $address } }, blockchain: base }) {
+      TokenNft {
+        address
+        blockchain
+        chainId
+        type
+        totalSupply
+        metaData {
+          image
+          externalUrl
+        }
+      }
+    }
+  }
+`;
+
 const frames = router({
   topGlobal: publicProcedure
     .input(
@@ -126,8 +144,60 @@ const frames = router({
     }),
 });
 
+const nft = router({
+  getBaseNft: publicProcedure
+    .input(
+      z.object({
+        address: z.string(),
+      }),
+    )
+    .query(async ({ input }) => {
+      const nft = await fetch('https://api.airstack.xyz/graphql', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer 1e70e5f2960ae4933b6da871af7e94ae0`,
+        },
+        body: JSON.stringify({
+          query: queryBaseNFT,
+          variables: {
+            address: input.address,
+          },
+        }),
+        cf: {
+          cacheTtl: 300,
+        },
+      });
+
+      const data = await nft.json();
+
+      // @ts-expect-error fix later
+      const nfts = data?.data?.TokenNfts;
+
+      if (nfts?.TokenNft.length === 0) {
+        return null;
+      }
+
+      const image = nfts.TokenNft?.[0].metaData.image;
+
+      if (!image) return null;
+
+      const ipfshash = image.startsWith('ipfs://') ? image.replace('ipfs://', '') : null;
+      console.log(ipfshash);
+      if (!ipfshash) return null;
+
+      const imageUrl = `https://ipfs.io/ipfs/${ipfshash}`;
+
+      return {
+        address: nfts.TokenNft?.[0].address,
+        imageUrl,
+      };
+    }),
+});
+
 export const appRouter = router({
   frames,
+  nft,
 });
 
 export type AppRouter = typeof appRouter;
